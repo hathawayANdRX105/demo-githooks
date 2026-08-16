@@ -1,0 +1,7 @@
+# oi 配置与数据
+.oi/
+omenic-data/
+omenic.toml
+# Python 缓存
+__pycache__/
+*.pyc
