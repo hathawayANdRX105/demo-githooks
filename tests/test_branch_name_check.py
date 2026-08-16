@@ -49,9 +49,15 @@ class BranchNameCheckTests(unittest.TestCase):
                 self.assertEqual(result.stdout, "")
 
     def test_reads_current_branch_when_argument_is_omitted(self) -> None:
-        result = self.run_checker()
+        with tempfile.TemporaryDirectory() as directory:
+            subprocess.run(
+                ["git", "init", "--quiet", "--initial-branch", "feat/test-branch"],
+                cwd=directory,
+                check=True,
+            )
+            result = self.run_checker(cwd=Path(directory))
         self.assertEqual(result.returncode, 0)
-        self.assertIn("ok: feat/issue-14-branch-name-check", result.stdout)
+        self.assertEqual(result.stdout, "ok: feat/test-branch\n")
         self.assertEqual(result.stderr, "")
 
     def test_reports_git_read_failure_with_exit_two(self) -> None:
